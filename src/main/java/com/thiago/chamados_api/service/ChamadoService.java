@@ -2,12 +2,13 @@ package com.thiago.chamados_api.service;
 
 import com.thiago.chamados_api.dto.ChamadoUpdateDto;
 import com.thiago.chamados_api.entity.Chamado;
+import com.thiago.chamados_api.projection.ChamadoProjection;
 import com.thiago.chamados_api.repository.ChamadoRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -19,8 +20,8 @@ public class ChamadoService {
         return chamadoRepository.save(chamado);
     }
 
-    public List<Chamado> buscarTodos(){
-        return chamadoRepository.findAll();
+    public Page<ChamadoProjection> buscarTodos(Pageable pageable){
+        return chamadoRepository.finAllPageable(pageable);
     }
 
     public void excluirChamadoPorId(Long id){

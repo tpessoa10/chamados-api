@@ -3,13 +3,19 @@ package com.thiago.chamados_api.controller;
 import com.thiago.chamados_api.dto.ChamadoCreateDto;
 import com.thiago.chamados_api.dto.ChamadoResponseDto;
 import com.thiago.chamados_api.dto.ChamadoUpdateDto;
+import com.thiago.chamados_api.dto.PageableDto;
 import com.thiago.chamados_api.dto.mapper.ChamadoMapper;
+import com.thiago.chamados_api.dto.mapper.PageableMapper;
 import com.thiago.chamados_api.entity.Chamado;
-import com.thiago.chamados_api.repository.ChamadoRepository;
+import com.thiago.chamados_api.projection.ChamadoProjection;
 import com.thiago.chamados_api.service.ChamadoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.annotations.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,9 +31,9 @@ public class ChamadosController {
     private ChamadoService chamadoService;
 
     @GetMapping
-    public List<Chamado> getAll(){
-        List<Chamado> chamados = chamadoService.buscarTodos();
-        return chamados;
+    public ResponseEntity<PageableDto<ChamadoProjection>> getAll(@PageableDefault(size = 5, sort = {"titulo"}) Pageable pageable) {
+        Page<ChamadoProjection> chamados = chamadoService.buscarTodos(pageable);
+        return ResponseEntity.ok(PageableMapper.toDto(chamados));
     }
 
     @PostMapping

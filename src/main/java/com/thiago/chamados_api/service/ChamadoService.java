@@ -2,6 +2,7 @@ package com.thiago.chamados_api.service;
 
 import com.thiago.chamados_api.dto.ChamadoUpdateDto;
 import com.thiago.chamados_api.entity.Chamado;
+import com.thiago.chamados_api.exceptions.EntityNotFoundException;
 import com.thiago.chamados_api.projection.ChamadoProjection;
 import com.thiago.chamados_api.repository.ChamadoRepository;
 import jakarta.validation.Valid;
@@ -25,12 +26,15 @@ public class ChamadoService {
     }
 
     public void excluirChamadoPorId(Long id){
-        chamadoRepository.deleteById(id);
+        Chamado chamado = chamadoRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException("Chamado", id.toString())
+        );
+        chamadoRepository.delete(chamado);
     }
 
     public Chamado buscarPorId(Long id, ChamadoUpdateDto dto) {
         Chamado chamado = chamadoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Chamado não encontrado"));
+                .orElseThrow(() -> new EntityNotFoundException("Chamado", id.toString()));
 
         if (dto.getChamadoCategoria() != null) {
             chamado.setChamadoCategoria(dto.getChamadoCategoria());

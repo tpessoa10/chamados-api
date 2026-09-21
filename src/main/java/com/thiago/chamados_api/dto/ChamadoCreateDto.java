@@ -15,12 +15,12 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ChamadoCreateDto {
 
-    @NotBlank
+    @NotBlank(message = "Campo não deve ser vazio ou nulo!")
     private String titulo;
-    @NotBlank
+    @NotBlank(message = "Campo não deve ser vazio ou nulo!")
     private String descricao;
-    @NotNull
+    @NotNull(message = "Campo não deve ser vazio ou nulo!")
     private ChamadoPrioridade chamadoPrioridade;
-    @NotNull
+    @NotNull(message = "Campo não deve ser vazio ou nulo!")
     private ChamadoCategoria chamadoCategoria;
 }

@@ -12,10 +12,9 @@ import org.springframework.data.repository.query.Param;
 
 public interface ChamadoRepository extends JpaRepository<Chamado, Long>, JpaSpecificationExecutor<Chamado> {
     @Query("""
-    SELECT c
-    FROM Chamado c
-    WHERE (:titulo IS NULL
-           OR LOWER(c.titulo) LIKE CONCAT('%', LOWER(:titulo), '%'))
-""")
+        SELECT c
+        FROM Chamado c
+        WHERE LOWER(c.titulo) LIKE CONCAT('%', LOWER(COALESCE(:titulo, '')), '%')
+    """)
     Page<ChamadoProjection> findAllPageable(@Param("titulo") String titulo, Pageable pageable);
 }

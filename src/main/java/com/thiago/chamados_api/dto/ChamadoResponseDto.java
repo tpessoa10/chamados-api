@@ -14,5 +14,5 @@ public class ChamadoResponseDto {
 
     private Long id;
     private String titulo;
-    private String descripcion;
+    private String descricao;
 }

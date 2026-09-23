@@ -1,9 +1,6 @@
 package com.thiago.chamados_api.controller;
 
-import com.thiago.chamados_api.dto.ChamadoCreateDto;
-import com.thiago.chamados_api.dto.ChamadoResponseDto;
-import com.thiago.chamados_api.dto.ChamadoUpdateDto;
-import com.thiago.chamados_api.dto.PageableDto;
+import com.thiago.chamados_api.dto.*;
 import com.thiago.chamados_api.dto.mapper.ChamadoMapper;
 import com.thiago.chamados_api.dto.mapper.PageableMapper;
 import com.thiago.chamados_api.entity.Chamado;
@@ -31,8 +28,8 @@ public class ChamadosController {
     private ChamadoService chamadoService;
 
     @GetMapping
-    public ResponseEntity<PageableDto<ChamadoProjection>> getAll(@PageableDefault(size = 5, sort = {"titulo"}) Pageable pageable) {
-        Page<ChamadoProjection> chamados = chamadoService.buscarTodos(pageable);
+    public ResponseEntity<PageableDto<ChamadoProjection>> getAll(@ModelAttribute ChamadoFiltroRequest filtro, @PageableDefault(size = 5, sort = {"titulo"}) Pageable pageable) {
+        Page<ChamadoProjection> chamados = chamadoService.buscarTodos(filtro ,pageable);
         return ResponseEntity.ok(PageableMapper.toDto(chamados));
     }
 

@@ -1,11 +1,11 @@
 package com.thiago.chamados_api.service;
 
+import com.thiago.chamados_api.dto.ChamadoFiltroRequest;
 import com.thiago.chamados_api.dto.ChamadoUpdateDto;
 import com.thiago.chamados_api.entity.Chamado;
 import com.thiago.chamados_api.exceptions.EntityNotFoundException;
 import com.thiago.chamados_api.projection.ChamadoProjection;
 import com.thiago.chamados_api.repository.ChamadoRepository;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,8 +21,14 @@ public class ChamadoService {
         return chamadoRepository.save(chamado);
     }
 
-    public Page<ChamadoProjection> buscarTodos(Pageable pageable){
-        return chamadoRepository.finAllPageable(pageable);
+    public Page<ChamadoProjection> buscarTodos(
+            ChamadoFiltroRequest filtro,
+            Pageable pageable) {
+
+        return chamadoRepository.findAllPageable(
+                filtro.titulo(),
+                pageable
+        );
     }
 
     public void excluirChamadoPorId(Long id){

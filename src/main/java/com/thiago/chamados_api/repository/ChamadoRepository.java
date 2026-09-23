@@ -4,13 +4,18 @@ import com.thiago.chamados_api.entity.Chamado;
 import com.thiago.chamados_api.projection.ChamadoProjection;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
-
-import java.util.List;
-
-public interface ChamadoRepository extends JpaRepository<Chamado, Long> {
-    @Query("select c from Chamado c")
-    Page<ChamadoProjection> finAllPageable(Pageable pageable);
+public interface ChamadoRepository extends JpaRepository<Chamado, Long>, JpaSpecificationExecutor<Chamado> {
+    @Query("""
+    SELECT c
+    FROM Chamado c
+    WHERE (:titulo IS NULL
+           OR LOWER(c.titulo) LIKE CONCAT('%', LOWER(:titulo), '%'))
+""")
+    Page<ChamadoProjection> findAllPageable(@Param("titulo") String titulo, Pageable pageable);
 }
